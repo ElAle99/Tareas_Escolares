@@ -15,7 +15,4 @@ app.use('/api/materias', require('./routes/materias.routes'));
 app.use('/api/horarios', require('./routes/horarios.routes'));
 app.use('/api/tareas', require('./routes/tareas.routes'));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-})
+module.exports = app;
