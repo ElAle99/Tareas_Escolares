@@ -14,7 +14,7 @@ const controller = require('../controllers/tareas.controller');
 
 //http://localhost:3000/api/tareas/estado/vencidas metodo: GET tareas vencidas
 //http://localhost:3000/api/tareas/estado/completadas metodo: GET tareas completadas
-//http://localhost:3000/api/tareas/materia/:id_materia metodo: GET tareas por materia
+//http://localhost:3000/api/tareas/materia/:id_materia metodo: GET tareasmateria
 
 router.post('/', verificarToken, controller.crearTarea); //creasr una nueva tarea
 
