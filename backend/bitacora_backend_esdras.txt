@@ -1,0 +1,59 @@
+commit ce76ed395da04d4fab7210c948c1ada6e2912f3e
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Wed Mar 11 11:33:44 2026 -0500
+
+    carga de tareas
+
+commit 011d8cf2db1037e05c27717c687bf858d82a2862
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Mon Mar 9 12:52:43 2026 -0500
+
+    Add JWT and backend updates
+
+commit fd6bd6d84765993077335d13fbb8e061a21900de
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Thu Mar 5 12:54:04 2026 -0500
+
+    Add JWT and backend updates
+
+commit 6669df17ccf0e56777c92b165b0f3355019c0d46
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Thu Mar 5 12:29:35 2026 -0500
+
+    Add JWT and backend updates
+
+commit e48add932ad59acfd91ea7a6edefe62363c396ab
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Mon Mar 2 13:29:06 2026 -0500
+
+    Add JWT and backend updates
+
+commit 877f25d04ebc2063800273327dbe964d112a50da
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Mon Mar 2 13:25:11 2026 -0500
+
+    Add JWT and backend updates
+
+commit 2a216cc18a2983301fc0868a1c626a617606adf5
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Mon Mar 2 13:12:27 2026 -0500
+
+    Add JWT and backend updates
+
+commit e1ce11282192a3d3b378cdf71e308fcb0ae53040
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Mon Mar 2 12:53:22 2026 -0500
+
+    Add JWT and backend updates
+
+commit 719ba4b63c4f1e9bfb96dca644d039f72682c301
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Thu Feb 26 11:24:20 2026 -0500
+
+    first commit
+
+commit 2a8bf4c040682e26f85b5f2f8edbb4e775ebd0ce
+Author: Oscar Zapata <upboscar@gmail.com>
+Date:   Thu Feb 26 07:34:09 2026 -0500
+
+    Primer commit
