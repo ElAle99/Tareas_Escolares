@@ -1,3 +1,9 @@
+commit be81b5a2871b26fb6ff48a11add2dee6c9deb610
+Author: Eliel Alegria <eliel.alegria999@gmail.com>
+Date:   Thu Mar 12 11:42:43 2026 -0500
+
+    carga de Horarios
+
 commit ce76ed395da04d4fab7210c948c1ada6e2912f3e
 Author: Eliel Alegria <eliel.alegria999@gmail.com>
 Date:   Wed Mar 11 11:33:44 2026 -0500
