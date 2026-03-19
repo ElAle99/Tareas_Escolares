@@ -6,8 +6,11 @@ const pool = require('../config/db');
  * ==============================
  */
 exports.crearMateria = async (req, res) => {
-  const { nombre, profesor, id_periodo } = req.body;
+  const { nombre, profesor, id_periodo, color } = req.body;
   const id_usuario = req.usuario.id_usuario;
+  
+  // Asignar color por defecto si no se proporciona
+  const colorMateria = color || '#3B82F6';
 
   if (!nombre || !id_periodo) {
     return res.status(400).json({
@@ -31,10 +34,10 @@ exports.crearMateria = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO materias (nombre, profesor, id_periodo)
-       VALUES ($1, $2, $3)
+      `INSERT INTO materias (nombre, profesor, id_periodo, color)
+       VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [nombre, profesor, id_periodo]
+      [nombre, profesor, id_periodo, colorMateria]
     );
 
     res.status(201).json(result.rows[0]);
@@ -58,6 +61,7 @@ exports.obtenerTodasLasMaterias = async (req, res) => {
       `SELECT m.id_materia,
               m.nombre,
               m.profesor,
+              m.color,
               p.id_periodo,
               p.nombre AS periodo
        FROM materias m
@@ -153,7 +157,7 @@ exports.obtenerMateriaPorId = async (req, res) => {
  */
 exports.actualizarMateria = async (req, res) => {
   const { id } = req.params;
-  const { nombre, profesor } = req.body;
+  const { nombre, profesor, color } = req.body;
   const id_usuario = req.usuario.id_usuario;
 
   try {
@@ -161,13 +165,14 @@ exports.actualizarMateria = async (req, res) => {
     const result = await pool.query(
       `UPDATE materias m
        SET nombre = $1,
-           profesor = $2
+           profesor = $2,
+           color = COALESCE($3, color)
        FROM periodos p
-       WHERE m.id_materia = $3
+       WHERE m.id_materia = $4
          AND m.id_periodo = p.id_periodo
-         AND p.id_usuario = $4
+         AND p.id_usuario = $5
        RETURNING m.*`,
-      [nombre, profesor, id, id_usuario]
+      [nombre, profesor, color, id, id_usuario]
     );
 
     if (result.rows.length === 0) {
