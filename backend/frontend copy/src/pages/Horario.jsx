@@ -1,34 +1,23 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api/axios';
-import { Plus, Trash2, Download, Image as ImageIcon } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import html2canvas from 'html2canvas';
 
 export default function Horario() {
   const [horarios, setHorarios] = useState([]);
   const [materias, setMaterias] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState({ dia_semana: 'Lun', hora_inicio: '07:00', hora_fin: '07:50', id_materia: '' });
-  const scheduleRef = useRef(null);
+  const [formData, setFormData] = useState({ dia_semana: 'Lun', hora_inicio: '07:00', hora_fin: '09:00', id_materia: '' });
 
   const dias = [
     { id: 'Lun', nombre: 'Lunes' },
     { id: 'Mar', nombre: 'Martes' },
     { id: 'Mie', nombre: 'Miércoles' },
     { id: 'Jue', nombre: 'Jueves' },
-    { id: 'Vie', nombre: 'Viernes' }
+    { id: 'Vie', nombre: 'Viernes' },
+    { id: 'Sab', nombre: 'Sábado' }
   ];
-  const slots = [
-    { start: '07:00', end: '07:50' },
-    { start: '07:50', end: '08:40' },
-    { start: '08:40', end: '09:30' },
-    { start: '09:30', end: '10:30', isReceso: true },
-    { start: '10:30', end: '11:20' },
-    { start: '11:20', end: '12:10' },
-    { start: '12:10', end: '13:00' },
-    { start: '13:00', end: '13:50' },
-    { start: '13:50', end: '14:40' }
-  ];
+  const horasPosibles = Array.from({length: 15}, (_, i) => `${String(i+7).padStart(2,'0')}:00`);
 
   useEffect(() => {
     fetchData();
@@ -72,52 +61,6 @@ export default function Horario() {
     }
   };
 
-  const exportAsImage = async () => {
-    if (!scheduleRef.current) return;
-    const toastId = toast.loading('Capturando horario...');
-    try {
-      const canvas = await html2canvas(scheduleRef.current, {
-        backgroundColor: '#ffffff',
-        scale: 3,
-        logging: false,
-        useCORS: true,
-        onclone: (clonedDoc) => {
-          // HACK: Reemplazar oklch() con rgb() porque html2canvas no lo soporta
-          const elements = clonedDoc.getElementsByTagName("*");
-          for (let i = 0; i < elements.length; i++) {
-            const el = elements[i];
-            const style = window.getComputedStyle(el);
-            
-            // Si detectamos oklch en alguna propiedad crítica, forzamos un color compatible
-            if (style.backgroundColor.includes('oklch')) {
-              el.style.backgroundColor = '#ffffff'; // Fallback seguro
-            }
-            if (style.color.includes('oklch')) {
-              el.style.color = '#000000';
-            }
-            // Asegurar que las celdas de materias mantengan su color (usando inline styles que ya tienen hex)
-            if (el.style.backgroundColor && el.style.backgroundColor.startsWith('#')) {
-              // Mantener el color de la materia que ya viene en hex
-            }
-          }
-        }
-      });
-      
-      const imgData = canvas.toDataURL("image/png");
-      const link = document.createElement('a');
-      link.href = imgData;
-      link.download = 'horario.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      toast.success('Horario descargado: horario.png', { id: toastId });
-    } catch (error) {
-      console.error('Error en exportación:', error);
-      toast.error('Error al generar PNG con html2canvas', { id: toastId });
-    }
-  };
-
   // Helper para buscar color de la materia
   const getColorMateria = (id_materia) => {
     const mat = materias.find(m => m.id_materia === id_materia);
@@ -126,30 +69,28 @@ export default function Horario() {
 
   // Preparación de la matriz del horario
   const tableMatrix = {};
-  slots.forEach(slot => {
-    tableMatrix[slot.start] = {};
+  horasPosibles.forEach(hora => {
+    tableMatrix[hora] = {};
     dias.forEach(d => {
-      tableMatrix[slot.start][d.id] = { skip: false, event: null, rowSpan: 1, isReceso: slot.isReceso };
+      tableMatrix[hora][d.id] = { skip: false, event: null, rowSpan: 1 };
     });
   });
 
   horarios.forEach(h => {
-    const startIndex = slots.findIndex(s => s.start === h.hora_inicio.substring(0,5));
-    const endIndex = slots.findIndex(s => s.end === h.hora_fin.substring(0,5));
+    const startH = parseInt(h.hora_inicio.substring(0, 2));
+    const endH = parseInt(h.hora_fin.substring(0, 2));
+    const span = Math.max(1, endH - startH);
+    const startStr = `${String(startH).padStart(2, '0')}:00`;
     
-    if (startIndex !== -1 && endIndex !== -1 && endIndex >= startIndex) {
-      const span = endIndex - startIndex + 1;
-      const startStr = slots[startIndex].start;
-      
-      if (tableMatrix[startStr] && tableMatrix[startStr][h.dia_semana] !== undefined) {
-        if (!tableMatrix[startStr][h.dia_semana].event) {
-          tableMatrix[startStr][h.dia_semana].event = h;
-          tableMatrix[startStr][h.dia_semana].rowSpan = span;
-          for (let i = 1; i < span; i++) {
-            const nextStr = slots[startIndex + i]?.start;
-            if (nextStr && tableMatrix[nextStr] && tableMatrix[nextStr][h.dia_semana] !== undefined) {
-              tableMatrix[nextStr][h.dia_semana].skip = true;
-            }
+    if (tableMatrix[startStr] && tableMatrix[startStr][h.dia_semana] !== undefined) {
+      if (!tableMatrix[startStr][h.dia_semana].event) {
+        tableMatrix[startStr][h.dia_semana].event = h;
+        tableMatrix[startStr][h.dia_semana].rowSpan = span;
+        for (let i = 1; i < span; i++) {
+          const nextH = startH + i;
+          const nextStr = `${String(nextH).padStart(2, '0')}:00`;
+          if (tableMatrix[nextStr] && tableMatrix[nextStr][h.dia_semana] !== undefined) {
+            tableMatrix[nextStr][h.dia_semana].skip = true;
           }
         }
       }
@@ -169,15 +110,11 @@ export default function Horario() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Hora Inicio</label>
-            <select className="w-full px-3 py-2 bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-600 rounded-lg outline-none" value={formData.hora_inicio} onChange={(e) => setFormData({...formData, hora_inicio: e.target.value})}>
-              {slots.filter(s => !s.isReceso).map(s => <option key={s.start} value={s.start}>{s.start}</option>)}
-            </select>
+            <input type="time" required className="w-full px-3 py-2 bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-600 rounded-lg outline-none" value={formData.hora_inicio} onChange={(e) => setFormData({...formData, hora_inicio: e.target.value})} />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Hora Fin</label>
-            <select className="w-full px-3 py-2 bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-600 rounded-lg outline-none" value={formData.hora_fin} onChange={(e) => setFormData({...formData, hora_fin: e.target.value})}>
-              {slots.filter(s => !s.isReceso).map(s => <option key={s.end} value={s.end}>{s.end}</option>)}
-            </select>
+            <input type="time" required className="w-full px-3 py-2 bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-600 rounded-lg outline-none" value={formData.hora_fin} onChange={(e) => setFormData({...formData, hora_fin: e.target.value})} />
           </div>
           <div className="col-span-1 md:col-span-1">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Materia</label>
@@ -196,16 +133,7 @@ export default function Horario() {
         </form>
       </div>
 
-      <div className="flex flex-wrap gap-3 justify-end">
-        <button 
-          onClick={exportAsImage}
-          className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium shadow-sm"
-        >
-          <ImageIcon className="w-4 h-4 mr-2" /> Descargar horario en PNG
-        </button>
-      </div>
-
-      <div ref={scheduleRef} className="bg-white dark:bg-slate-800 shadow-sm border border-gray-100 dark:border-slate-700 rounded-xl p-6 overflow-x-auto">
+      <div className="bg-white dark:bg-slate-800 shadow-sm border border-gray-100 dark:border-slate-700 rounded-xl p-6 overflow-x-auto">
         <table className="w-full min-w-[800px] border-collapse">
           <thead>
             <tr>
@@ -216,27 +144,19 @@ export default function Horario() {
             </tr>
           </thead>
           <tbody>
-            {slots.map((slot) => (
-              <tr key={slot.start}>
+            {horasPosibles.map((hora) => (
+              <tr key={hora}>
                 <td className="border border-gray-200 dark:border-slate-700 p-2 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
-                  {slot.start} - {slot.end}
+                  {hora}
                 </td>
                 {dias.map(dia => {
-                  const cellData = tableMatrix[slot.start][dia.id];
+                  const cellData = tableMatrix[hora][dia.id];
                   if (cellData.skip) return null; // saltar si está ocupada
-
-                  if (cellData.isReceso) {
-                    return (
-                      <td key={`${dia.id}-${slot.start}`} className="border border-gray-200 dark:border-slate-700 p-2 bg-gray-100 dark:bg-slate-700/50 text-center text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                        Receso
-                      </td>
-                    );
-                  }
 
                   if (cellData.event) {
                     const c = cellData.event;
                     return (
-                      <td key={`${dia.id}-${slot.start}`} rowSpan={cellData.rowSpan} className="border border-gray-200 dark:border-slate-700 p-0 relative align-top bg-white dark:bg-slate-800">
+                      <td key={`${dia.id}-${hora}`} rowSpan={cellData.rowSpan} className="border border-gray-200 dark:border-slate-700 p-0 relative align-top bg-white dark:bg-slate-800">
                         <div className="w-full h-full p-2 text-xs text-white relative group flex flex-col justify-center items-center text-center overflow-hidden"
                              style={{ backgroundColor: getColorMateria(c.id_materia), minHeight: `${cellData.rowSpan * 4}rem` }}>
                           <p className="font-bold truncate w-full px-1">{c.materia}</p>
@@ -253,7 +173,7 @@ export default function Horario() {
                   }
 
                   return (
-                    <td key={`${dia.id}-${slot.start}`} className="border border-gray-200 dark:border-slate-700 p-1 relative h-16 min-w-[120px] bg-white dark:bg-slate-800"></td>
+                    <td key={`${dia.id}-${hora}`} className="border border-gray-200 dark:border-slate-700 p-1 relative h-16 min-w-[120px] bg-white dark:bg-slate-800"></td>
                   );
                 })}
               </tr>

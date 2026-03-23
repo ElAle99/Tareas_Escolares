@@ -70,20 +70,11 @@ export default function Calendario() {
         .dark .fc-theme-standard td, .dark .fc-theme-standard th {
           border-color: #334155;
         }
-        .dark .fc-col-header-cell {
-          background-color: #1e293b;
-        }
         .dark .fc-col-header-cell-cushion {
           color: #f1f5f9;
         }
         .dark .fc-daygrid-day-number {
           color: #94a3b8;
-        }
-        .dark .fc-scrollgrid {
-          border-color: #334155 !important;
-        }
-        .dark .fc-day-today {
-          background-color: rgba(59, 130, 246, 0.1) !important;
         }
         .fc-event {
           cursor: pointer;

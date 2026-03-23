@@ -10,31 +10,28 @@ export default function Layout({ children }) {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    // Initial theme setup
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       setDarkMode(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setDarkMode(false);
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
-  useEffect(() => {
-    if (darkMode) {
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    if (!darkMode) {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
-  }, [darkMode]);
-
-  const toggleDarkMode = () => {
-    setDarkMode(prev => !prev);
   };
 
   const menu = [
-    { name: 'Panel de Control', path: '/dashboard', icon: LayoutDashboard },
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Tareas', path: '/tareas', icon: CheckSquare },
     { name: 'Materias', path: '/materias', icon: BookOpen },
     { name: 'Periodos', path: '/periodos', icon: FolderClock },
@@ -102,7 +99,7 @@ export default function Layout({ children }) {
         {/* Navbar para móvil (opcional/simple) o topbar genérico */}
         <header className="h-16 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between px-6">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white capitalize">
-            {location.pathname.replace('/', '') === 'dashboard' ? 'Panel de Control' : (location.pathname.replace('/', '') || 'Panel de Control')}
+            {location.pathname.replace('/', '') || 'Dashboard'}
           </h2>
           <button
             onClick={toggleDarkMode}
