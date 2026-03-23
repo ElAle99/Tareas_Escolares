@@ -1,34 +1,93 @@
 # Tareas_Escolares
 
-Sistema de gestión escolar para administrar periodos académicos, materias, tareas y horarios.
+Este proyecto es una aplicación web desarrollada con tecnologías modernas enfocadas en rendimiento, escalabilidad y una buena experiencia de usuario.
 
-## 📋 BACKEND - Gestión Escolar
+---
 
-### 🛠️ Tecnologías y Librerías Utilizadas
+## 🚀 Tecnologías utilizadas
 
-| Herramienta/Librería | Versión | Descripción |
-|----------------------|---------|-------------|
-| Node.js | v18.17.0 | Entorno de ejecución para JavaScript |
-| Express | 4.18.2 | Framework para construir APIs REST |
-| PostgreSQL | 14.9 | Sistema de gestión de bases de datos relacional |
-| pg | 8.11.3 | Cliente de PostgreSQL para Node.js |
-| jsonwebtoken | 9.0.2 | Implementación de JWT para autenticación |
-| bcryptjs | 2.4.3 | Encriptación de contraseñas |
-| dotenv | 16.3.1 | Manejo de variables de entorno |
-| cors | 2.8.5 | Habilitar CORS en el servidor |
-| morgan | 1.10.0 | Logger de peticiones HTTP |
+### 🎨 Frontend
 
-### 📦 Dependencias de Desarrollo
+#### 📦 Runtime Dependencies
 
-| Herramienta | Versión | Descripción |
-|------------|---------|-------------|
-| nodemon | 3.0.1 | Reinicio automático del servidor en desarrollo |
+| Paquete               | Versión  |
+| --------------------- | -------- |
+| react                 | ^19.2.4  |
+| react-dom             | ^19.2.4  |
+| react-router-dom      | ^7.13.1  |
+| axios                 | ^1.13.6  |
+| lucide-react          | ^0.577.0 |
+| react-hot-toast       | ^2.6.0   |
+| @fullcalendar/core    | ^6.1.20  |
+| @fullcalendar/daygrid | ^6.1.20  |
+| @fullcalendar/react   | ^6.1.20  |
+| html-to-image         | ^1.11.13 |
+| html2canvas           | ^1.4.1   |
+| jspdf                 | ^4.2.1   |
+| date-fns              | ^4.1.0   |
 
-### 🚀 Instalación y Configuración del Backend
+#### 🛠️ Dev Dependencies
 
-Para replicar este proyecto en otro equipo:
+| Paquete              | Versión  |
+| -------------------- | -------- |
+| vite                 | ^8.0.1   |
+| @vitejs/plugin-react | ^6.0.1   |
+| tailwindcss          | ^4.2.2   |
+| @tailwindcss/vite    | ^4.2.2   |
+| autoprefixer         | ^10.4.27 |
+| postcss              | ^8.5.8   |
+| eslint               | ^9.39.4  |
 
-1. **Clonar el repositorio**
-   ```bash
-   git clone <url-del-repositorio>
-   cd Tareas_Escolares
+---
+
+## ⚙️ Backend
+
+A continuación se describen las herramientas utilizadas en el backend del proyecto. Esto permite que cualquier desarrollador pueda replicar el entorno fácilmente.
+
+| Herramienta / Librería | Versión       | Descripción               |
+| ---------------------- | ------------- | ------------------------- |
+| Node.js                | (Especificar) | Entorno de ejecución      |
+| Express                | (Especificar) | Framework para API REST   |
+| Base de Datos          | (Especificar) | Sistema de almacenamiento |
+| ORM / ODM              | (Especificar) | Manejo de base de datos   |
+
+> ⚠️ Nota: Completar las versiones exactas según tu proyecto.
+
+---
+
+## 🔗 Endpoints
+
+A continuación se listan los endpoints disponibles en la API:
+
+| Endpoint          | Método | Descripción                |
+| ----------------- | ------ | -------------------------- |
+| /api/usuarios     | GET    | Obtiene todos los usuarios |
+| /api/usuarios     | POST   | Crea un nuevo usuario      |
+| /api/usuarios/:id | GET    | Obtiene un usuario por ID  |
+| /api/usuarios/:id | PUT    | Actualiza un usuario       |
+| /api/usuarios/:id | DELETE | Elimina un usuario         |
+
+> ⚠️ Nota: Ajusta los endpoints según tu implementación real.
+
+---
+
+## 📦 Instalación
+
+```bash
+# Clonar repositorio
+git clone <URL_DEL_REPOSITORIO>
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en desarrollo
+npm run dev
+```
+
+---
+
+## 📅 Información del proyecto
+
+**Universidad:** Universidad Politécnica de Bacalar
+**Desarrollador:** Eliel Alegria Cruz
+**Fecha:** 2026
