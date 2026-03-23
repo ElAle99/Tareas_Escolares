@@ -67,23 +67,6 @@ A continuación se listan los endpoints disponibles en la API:
 | /api/usuarios/:id | PUT    | Actualiza un usuario       |
 | /api/usuarios/:id | DELETE | Elimina un usuario         |
 
-> ⚠️ Nota: Ajusta los endpoints según tu implementación real.
-
----
-
-## 📦 Instalación
-
-```bash
-# Clonar repositorio
-git clone <URL_DEL_REPOSITORIO>
-
-# Instalar dependencias
-npm install
-
-# Ejecutar en desarrollo
-npm run dev
-```
-
 ---
 
 ## 📅 Información del proyecto
